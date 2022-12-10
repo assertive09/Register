@@ -70,21 +70,25 @@
                         success: function (data, textStatus, jqXHR) {
                             console.log(data);
                             console.log("Success");
-                             $('.loader').hide();
-                             $('form').show();
-                             
-                                 $('#msg').html("Succesfully Updated");
-                                 $('#msg').addClass('green-text');
-                           
+                            $('.loader').hide();
+                            $('form').show();
+                            if (data.trim() === 'done') {
+                                $('#msg').html("Succesfully Updated");
+                                $('#msg').addClass('green-text');
+                            } else {
+                                $('#msg').html("Something went wrong");
+                                $('#msg').addClass('red-text');
+
+                            }
                         }
                         , error: function (jqXHR, textStatus, errorThrown) {
                             console.log(data);
                             console.log("Error");
                             $('.loader').hide();
-                             $('form').show();
-                              $('#msg').html("Something went wrong");
-                               $('#msg').addClass('red-text');
-                            
+                            $('form').show();
+                            $('#msg').html("Something went wrong");
+                            $('#msg').addClass('red-text');
+
                         }
 
                     }
