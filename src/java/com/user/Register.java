@@ -14,46 +14,21 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet Register</title>");
-//            out.println("</head>");
-//            out.println("<body>");
-
-            //geting all the incoming details from the request
+           
             String name = request.getParameter("user_name");
             String password = request.getParameter("user_password");
             String email = request.getParameter("user_email");
-//            out.println(name);
-//            out.println(password);
-//            out.println(email);
+
             //query
             try {
-              
-                Thread.sleep(3000);
-                PreparedStatement s = new Conn().c.prepareStatement("insert into user (name,password,email) values (?,?,?)");
-                s.setString(1, name);
-                s.setString(2, password);
-                s.setString(3, email);
-                s.executeUpdate();
-                out.println("done");
-              
-            } catch (Exception e) {
+                Conn conn=new Conn();
+             conn.s.executeUpdate("insert into user (name,password,email) values ('"+name+"','"+password+"','"+email+"')");
+               out.println("done");
+               
+            } catch (SQLException e) {
                 System.out.println(e);
             }
-
-//            try {
-//                Conn conn=new Conn();
-//               int rs= conn.s.executeUpdate("insert into user (name,password,email) values ('"+name+"','"+password+"','"+email+"')");
-//                if(rs!=0){
-//                out.println("<br><h2>Data successfully inserted</h2>");
-//                }
-//            } catch (Exception e) {
-//            }
-//            out.println("</body>");
-//            out.println("</html>");
+           
         }
     }
 
