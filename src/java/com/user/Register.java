@@ -1,34 +1,56 @@
 package com.user;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
 
+@MultipartConfig
 public class Register extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-           
+        try (PrintWriter out = response.getWriter()) {
+
+            
             String name = request.getParameter("user_name");
             String password = request.getParameter("user_password");
             String email = request.getParameter("user_email");
-
+            Part part=request.getPart("image");
+            String filename=part.getSubmittedFileName();
+         
             //query
             try {
-                Conn conn=new Conn();
-             conn.s.executeUpdate("insert into user (name,password,email) values ('"+name+"','"+password+"','"+email+"')");
-               out.println("done");
-               
+                Thread.sleep(2000);
+                Conn conn = new Conn();
+                conn.s.executeUpdate("insert into user (name,password,email,image) values ('" + name + "','" + password + "','" + email + "','"+filename+"')");
+                
+                InputStream is=part.getInputStream();
+                byte []data=new byte[is.available()];
+                is.read(data); //reading the data in is and converting to byte 
+                
+                String path=request.getRealPath("/")+"img"+File.separator+filename;
+                out.println(path);
+                FileOutputStream fos=new FileOutputStream(path);
+                fos.write(data);
+                out.println("done"); 
+
             } catch (SQLException e) {
                 System.out.println(e);
             }
-           
+            catch(InterruptedException e) {
+                System.out.println(e);
+            }
+
         }
     }
 

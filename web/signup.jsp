@@ -26,6 +26,15 @@
                                     <input type="text" name="user_name" placeholder="enter user name">
                                     <input type="password" name="user_password" placeholder="enter password">
                                     <input type="email" name="user_email" placeholder="enter email">
+                                    <div class="file-field input-field">
+                                        <div class="btn">
+                                            <span>File</span>
+                                            <input name ="image" type="file">
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" type="text">
+                                        </div>
+                                    </div>
                                     <button type="submit" class="btn">submit</button>
                                 </form>
                             </div>
@@ -60,8 +69,10 @@
 
                 $("#myform").on('submit', function (event) {
                     event.preventDefault();
-                    var f = $(this).serialize();
-                    $('.loader').show();
+                   // var f = $(this).serialize();  if there is no file on text data we convert dom into string 
+                    let f=new FormData(this); 
+                   
+                    $('.loader').show(); // DOM manipulation
                     $('form').hide();
                     $.ajax({
                         url: 'Register',
@@ -70,16 +81,12 @@
                         success: function (data, textStatus, jqXHR) {
                             console.log(data);
                             console.log("Success");
-                            $('.loader').hide();
+                            $('.loader').hide(); 
                             $('form').show();
-                            if (data.trim() === 'done') {
                                 $('#msg').html("Succesfully Updated");
                                 $('#msg').addClass('green-text');
-                            } else {
-                                $('#msg').html("Something went wrong");
-                                $('#msg').addClass('red-text');
-
-                            }
+                     
+                            
                         }
                         , error: function (jqXHR, textStatus, errorThrown) {
                             console.log(data);
@@ -89,7 +96,9 @@
                             $('#msg').html("Something went wrong");
                             $('#msg').addClass('red-text');
 
-                        }
+                        },
+                        processData:false,
+                        contentType:false 
 
                     }
                     )
